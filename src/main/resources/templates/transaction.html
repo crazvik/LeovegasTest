@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction Page</title>
+    <link th:href="@{/style.css}" rel="stylesheet">
+</head>
+<body>
+<nav>
+    <ul id="linkList">
+        <li>
+            <a th:unless="${sessions.isEmpty()}" th:href="@{/index/{playerId}(playerId=${player.playerId})}" href="index.html">Index</a>
+            <a th:if="${sessions.isEmpty()}" th:href="@{/index}" href="index.html">Index</a>
+        </li>
+        <li>
+            <a th:unless="${sessions.isEmpty()}" th:href="@{/register/{playerId}(playerId=${player.playerId})}" href="register.html">Register</a>
+            <a th:if="${sessions.isEmpty()}" th:href="@{/register}" href="register.html">Register</a>
+        </li>
+        <li th:unless="${sessions.isEmpty()}">
+            <a th:unless="${player.admin}" th:href="@{/users/{playerId}(playerId=${player.playerId})}" href="user.html">User</a>
+            <a th:if="${player.admin}" th:href="@{/users/admin}" href="user.html">Admin</a>
+        </li>
+        <li th:unless="${sessions.isEmpty()}">
+            <a th:unless="${sessions.contains(player.playerId)}" th:href="@{/transaction/{playerId}(playerId=${player.playerId})}" href="transaction.html">Funds</a>
+        </li>
+    </ul>
+    <form th:action="@{/logout/{playerId}(playerId=${player.playerId})}" class="form-inline" method="post">
+        <div th:unless="${sessions.isEmpty()}" class="loginLogout">
+            <button class="btn btn-outline-info" type="submit" value="Logout" id="logoutButton">Logout</button>
+        </div>
+        <div th:if="${sessions.isEmpty()}" class="loginLogout">
+            <a class="btn btn-success" th:href="@{/login}" id="loginButton">Login</a>
+        </div>
+    </form>
+</nav>
+<section class="main-window">
+    <h1>Add or remove funds</h1>
+    <form th:action="@{/transaction/process}" th:object="${form}" method="post">
+        <label for="playerId"></label>
+        <input class="form-control" type="number" id="playerId" th:field="*{playerId}" placeholder="Player Id"/>
+        <label for="amount"></label>
+        <input class="form-control" type="number" id="amount" th:field="*{amount}" placeholder="Amount" />
+        <button id="submit" class="btn btn-primary" type="submit">Add money</button>
+    </form>
+    <div class="divBorder"></div>
+    <form th:action="@{/transaction/remove}" th:object="${form}" method="post" style="margin-top: -100px">
+        <label>
+            <input class="form-control" type="number" th:field="*{playerId}" placeholder="Player Id" />
+        </label>
+        <label>
+            <input class="form-control" type="number" th:field="*{amount}" placeholder="Amount" />
+        </label>
+        <button class="btn btn-primary" type="submit">Remove money</button>
+    </form>
+</section>
+</body>
+</html>

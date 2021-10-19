@@ -3,13 +3,13 @@ package se.jljung.LeovegasTest.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.jljung.LeovegasTest.Entity.Player;
-import se.jljung.LeovegasTest.Entity.Session;
+import se.jljung.LeovegasTest.Entity.Transaction;
 import se.jljung.LeovegasTest.Repository.PlayerRepo;
-import se.jljung.LeovegasTest.Repository.SessionRepo;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import se.jljung.LeovegasTest.Repository.TransactionRepo;
 
-import java.util.HashSet;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +19,9 @@ public class PlayerService {
     private PlayerRepo playerRepo;
 
     @Autowired
+    TransactionRepo transactionRepo;
+
+    @Autowired
     private SessionService sessionService;
 
     public boolean createPlayer(Player player) {
@@ -26,9 +29,7 @@ public class PlayerService {
             player.setPassword(BCrypt.hashpw(player.getPassword(), BCrypt.gensalt(12)));
             playerRepo.save(player);
             if (sessionService.getSessions().isEmpty()) {
-                System.out.println(player);
                 sessionService.createSession(player.getPlayerId(), UUID.randomUUID().toString());
-                System.out.println(sessionService.getSessions());
                 return true;
             }
         }
@@ -58,4 +59,31 @@ public class PlayerService {
         return playerRepo.findPlayerByUsername(username);
     }
 
+    public boolean addFunds(Long playerId, double amount) {
+        if (playerRepo.findById(playerId).isPresent()) {
+            LocalDate localDate = LocalDate.now();
+            playerRepo.findById(playerId).get().setFunds(amount+=playerRepo.findById(playerId).get().getFunds());
+            Transaction transaction = new Transaction(localDate.toString(), playerRepo.findById(playerId).get());
+            transactionRepo.save(transaction);
+            playerRepo.findById(playerId).get().setTransactions(transaction);
+            return true;
+        }
+        throw new IllegalArgumentException("Not a number added");
+    }
+
+    public boolean removeFunds(Long playerId, double amount) {
+        if (playerRepo.findById(playerId).isPresent()) {
+            LocalDate localDate = LocalDate.now();
+            if(playerRepo.findById(playerId).get().getFunds()<amount) {
+                return false;
+            } else {
+                playerRepo.findById(playerId).get().setFunds(amount-=playerRepo.findById(playerId).get().getFunds());
+                Transaction transaction = new Transaction(localDate.toString(), playerRepo.findById(playerId).get());
+                transactionRepo.save(transaction);
+                playerRepo.findById(playerId).get().setTransactions(transaction);
+                return true;
+            }
+        }
+        throw new IllegalArgumentException("Not a number added");
+    }
 }

@@ -37,7 +37,7 @@ public class IndexController {
     static void ControllerHelper(Model model, @PathVariable Long playerId, SessionService sessionService, PlayerService playerService) {
         List<Session> sessions = sessionService.getSessions();
         model.addAttribute("sessions", sessions);
-        Player player = playerService.findById(playerId); // Hardcoded due to the seeder for a test admin
+        Player player = playerService.findById(playerId);
         model.addAttribute("player", player);
         List<Player> players = playerService.findAllPlayers();
         model.addAttribute("players", players);

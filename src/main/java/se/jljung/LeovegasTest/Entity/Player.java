@@ -76,6 +76,10 @@ public class Player {
         this.transactions = transactions;
     }
 
+    public void setTransactions(Transaction transactions) {
+        this.transactions.add(transactions);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -86,16 +90,17 @@ public class Player {
 
     @Override
     public int hashCode() {
-        return Objects.hash(playerId, username, password, funds, transactions);
+        return Objects.hash(playerId, username, password, funds, isAdmin, transactions);
     }
 
     @Override
     public String toString() {
         return "Player{" +
-                "id=" + playerId +
+                "playerId=" + playerId +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", funds=" + funds +
+                ", isAdmin=" + isAdmin +
                 ", transactions=" + transactions +
                 '}';
     }

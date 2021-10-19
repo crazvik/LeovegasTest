@@ -24,8 +24,13 @@ public class UsersController {
 
     @GetMapping("/{playerId}")
     public String users(Model model, @PathVariable Long playerId) {
-        IndexController.ControllerHelper(model, playerId, sessionService, playerService);
-        return "users";
+        List<Session> sessions = sessionService.getSessions();
+        model.addAttribute("sessions", sessions);
+        Player player = playerService.findById(playerId);
+        model.addAttribute("player", player);
+        List<Player> players = playerService.findAllPlayers();
+        model.addAttribute("players", players);
+        return "user";
     }
 
     @GetMapping("/admin")
@@ -36,6 +41,6 @@ public class UsersController {
         model.addAttribute("player", player);
         List<Player> players = playerService.findAllPlayers();
         model.addAttribute("players", players);
-        return "users";
+        return "user";
     }
 }

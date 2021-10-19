@@ -62,10 +62,6 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transactions{" +
-                "id=" + transactionId +
-                ", transactions='" + transactions + '\'' +
-                ", player=" + player +
-                '}';
+        return "Date of transaction: " + transactions + '\n';
     }
 }

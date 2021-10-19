@@ -17,8 +17,11 @@
                 <a th:if="${sessions.isEmpty()}" th:href="@{/register}" href="register.html">Register</a>
             </li>
             <li th:unless="${sessions.isEmpty()}">
-                <a th:unless="${player.admin}" th:href="@{/users/{playerId}(playerId=${player.playerId})}" href="users.html">User</a>
-                <a th:if="${player.admin}" th:href="@{/users/admin}" href="users.html">Admin</a>
+                <a th:unless="${player.admin}" th:href="@{/users/{playerId}(playerId=${player.playerId})}" href="user.html">User</a>
+                <a th:if="${player.admin}" th:href="@{/users/admin}" href="user.html">Admin</a>
+            </li>
+            <li th:unless="${sessions.isEmpty()}">
+                <a th:unless="${sessions.contains(player.playerId)}" th:href="@{/transaction/{playerId}(playerId=${player.playerId})}" href="transaction.html">Funds</a>
             </li>
         </ul>
         <form th:action="@{/logout/{playerId}(playerId=${player.playerId})}" class="form-inline" method="post">

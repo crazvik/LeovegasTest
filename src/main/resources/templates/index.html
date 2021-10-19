@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Main Page</title>
-    <link th:href="@{/style.css}" rel="stylesheet">
+    <link th:href="@{css/style.css}" rel="stylesheet">
 </head>
 <body>
     <nav>
@@ -17,8 +17,11 @@
                 <a th:if="${sessions.isEmpty()}" th:href="@{/register}" href="register.html">Register</a>
             </li>
             <li th:unless="${sessions.isEmpty()}">
-                <a th:unless="${player.admin}" th:href="@{/users/{playerId}(playerId=${player.playerId})}" href="users.html">User</a>
-                <a th:if="${player.admin}" th:href="@{/users/admin}" href="users.html">Admin</a>
+                <a th:unless="${player.admin}" th:href="@{/users/{playerId}(playerId=${player.playerId})}" href="user.html">User</a>
+                <a th:if="${player.admin}" th:href="@{/users/admin}" href="user.html">Admin</a>
+            </li>
+            <li th:unless="${sessions.isEmpty()}">
+                <a th:unless="${sessions.contains(player.playerId)}" th:href="@{/transaction/{playerId}(playerId=${player.playerId})}" href="transaction.html">Funds</a>
             </li>
         </ul>
         <form th:action="@{/logout/{playerId}(playerId=${player.playerId})}" class="form-inline" method="post">
@@ -31,7 +34,25 @@
         </form>
     </nav>
     <section class="main-window">
-
+        <h1>Description</h1>
+        <p>Test app for Leovegas. Uses springboot for the framework and H2 as
+            its database. Creates a test admin with the credentials
+            "TestUsername" and "TestPassword" on startup  and starts with
+            this user logged in. Registering a new user while not logged in
+            will log in  the new user but in this case it's also not possible
+            to create a new admin. A logged-in user without admin privileges
+            can only see their own funds and transactions, while an admin can
+            see everything from every user, but also has the same
+            functionality as any other user.
+        </p>
+        <p>
+            All desired functionality has been implemented, but due to the
+            fairly simplistic UI, and the in-memory database it could be done
+            differently with other technologies etc. Due to me being a
+            junior developer I've done it in a way I know, but I think it
+            could be done in many ways. Don't have experience in setting up a
+            program in a docker image so had to stay simple with this one.
+        </p>
     </section>
 </body>
 </html>

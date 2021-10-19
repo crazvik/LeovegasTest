@@ -2,7 +2,6 @@ package se.jljung.LeovegasTest.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import se.jljung.LeovegasTest.Entity.Player;
 import se.jljung.LeovegasTest.Entity.Session;
 
 @Repository

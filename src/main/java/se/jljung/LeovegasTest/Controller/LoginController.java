@@ -27,7 +27,13 @@ public class LoginController {
 
     @GetMapping("/login")
     public String getLoginForm(Model model) {
-        RegisterController.ControllerHelper(model, 1L, sessionService, playerService);
+        List<Session> sessions = sessionService.getSessions();
+        model.addAttribute("sessions", sessions);
+        model.addAttribute("form", new PlayerForm());
+        Player player = playerService.findById(1L);
+        model.addAttribute("player", player);
+        List<Player> players = playerService.findAllPlayers();
+        model.addAttribute("players", players);
         return "login";
     }
 
